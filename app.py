@@ -150,7 +150,7 @@ def fetch_yahoo_news(ticker):
         feed = feedparser.parse(url)
         for entry in feed.entries[:10]:
             try:
-                published = parser.parse(entry.published)
+                published = parser.parse(entry.published).replace(tzinfo=None)
             except:
                 published = datetime.now()
             articles.append({
@@ -172,7 +172,7 @@ def fetch_google_news(ticker):
         feed = feedparser.parse(url)
         for entry in feed.entries[:10]:
             try:
-                published = parser.parse(entry.published)
+                published = parser.parse(entry.published).replace(tzinfo=None)
             except:
                 published = datetime.now()
             articles.append({

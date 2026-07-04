@@ -275,13 +275,25 @@ def render_chart_and_prediction(df, regression_results):
         line=dict(color='white')
     ))
     
-    # Prediction line
-    all_dates = list(df.index) + regression_results['future_dates']
+    # Historical Prediction Fit
+    N = len(df.index)
     fig.add_trace(go.Scatter(
-        x=all_dates, y=regression_results['all_predictions'],
+        x=df.index, y=regression_results['all_predictions'][:N],
         mode='lines',
-        name='Linear Regression Prediction',
-        line=dict(color='#58A6FF', dash='dot')
+        name='Historical Trend (Fit)',
+        line=dict(color='#8B949E', dash='dot') # Subtle grey dashed
+    ))
+    
+    # Future Prediction Line (Glowing/Bright)
+    future_x = [df.index[-1]] + regression_results['future_dates']
+    future_y = [regression_results['all_predictions'][N-1]] + list(regression_results['all_predictions'][N:])
+    
+    # Add a thicker, brighter neon blue line for the future
+    fig.add_trace(go.Scatter(
+        x=future_x, y=future_y,
+        mode='lines',
+        name='Future Prediction (90 Days)',
+        line=dict(color='#00FFFF', width=4) # Bright cyan/neon blue
     ))
     
     fig.update_layout(
